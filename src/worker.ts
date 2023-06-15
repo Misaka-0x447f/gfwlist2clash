@@ -24,7 +24,7 @@ export default {
     const sourceUrl = decodeURIComponent(url.searchParams.get('src') || 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt');
     const groupName = url.searchParams.get('groupName') || 'PROXY';
 
-    const sourceFileName = sourceUrl.split('/').pop() || 'untitled.yaml';
+    const baseConfigUrlFileName = baseConfigUrl.split('/').pop() || 'untitled.yaml';
 
     if (!baseConfigUrl.length) {
       return getHelloPage();
@@ -56,7 +56,7 @@ export default {
       {
         headers: {
           'Content-Type': 'text/vnd.yaml',
-          'Content-Disposition': `inline; filename="${sourceFileName}"`
+          'Content-Disposition': `inline; filename="${baseConfigUrlFileName}"`
         }
       }
     );
@@ -72,7 +72,7 @@ const getHelloPage = () => {
           <pre>valid arguments:</pre>
           <pre>base      *[encodedUrl] base config file you want to merge in. it must contain an item in "rules" called "ruleSlot".</pre>
           <pre>src        [encodedUrl] gfwlist source. default: github</pre>
-          <pre>groupName  [string]     proxy group name. default: PROXY</pre>
+          <pre>groupName  [string]     specify destination proxy group name. default: PROXY</pre>
         </div>
     </div>
     <style>
