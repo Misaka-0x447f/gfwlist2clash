@@ -1,4 +1,4 @@
-export const convertRule = (source: string) => {
+export const convertRule = (source: string, groupName: string) => {
   const worker = (input: string) => {
     const res: string[] = []
     const storage: Record<string, string[]> = {
@@ -61,15 +61,15 @@ export const convertRule = (source: string) => {
     })
 
     for (const pattern of storage.full) {
-      res.push(`DOMAIN,${pattern},PROXY`)
+      res.push(`DOMAIN,${pattern},${groupName}`)
     }
 
     for (const pattern of storage.suffix) {
-      res.push(`DOMAIN-SUFFIX,${pattern},PROXY`)
+      res.push(`DOMAIN-SUFFIX,${pattern},${groupName}`)
     }
 
     for (const pattern of storage.keyword) {
-      res.push(`DOMAIN-KEYWORD,${pattern},PROXY`)
+      res.push(`DOMAIN-KEYWORD,${pattern},${groupName}`)
     }
     return res
   }

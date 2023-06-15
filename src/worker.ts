@@ -22,6 +22,7 @@ export default {
     const url = new URL(request.url);
     const baseConfigUrl = url.searchParams.get('base');
     const sourceUrl = url.searchParams.get('src') || 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt';
+    const groupName = url.searchParams.get('groupName') || 'PROXY';
 
     if (!baseConfigUrl) {
       return getHelloPage();
@@ -31,7 +32,7 @@ export default {
     if (baseConfigResponse instanceof Response) return baseConfigResponse;
     const sourceResponse = await fetch(sourceUrl).then(res => res.text()).catch(e => getErrorPage(`requesting gfwlist (${sourceUrl})`, e.toString()));
     if (sourceResponse instanceof Response) return sourceResponse;
-    const convertedSource = convertRule(sourceResponse);
+    const convertedSource = convertRule(sourceResponse, groupName);
 
     let parsedBaseConfig: any;
     try {
@@ -62,8 +63,9 @@ const getHelloPage = () => {
         <div>
           <pre>missing required arguments: base</pre>
           <pre>valid arguments:</pre>
-          <pre>base *[url] base config file you want to merge in. it must contain an item in "rules" called "ruleSlot".</pre>
-          <pre>src   [url] gfwlist source. default: github</pre>
+          <pre>base      *[url]    base config file you want to merge in. it must contain an item in "rules" called "ruleSlot".</pre>
+          <pre>src        [url]    gfwlist source. default: github</pre>
+          <pre>groupName  [string] proxy group name. default: PROXY</pre>
         </div>
     </div>
     <style>
