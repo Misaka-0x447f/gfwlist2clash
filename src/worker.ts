@@ -20,11 +20,11 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     // You'll find it helpful to parse the request.url string into a URL object. Learn more at https://developer.mozilla.org/en-US/docs/Web/API/URL
     const url = new URL(request.url);
-    const baseConfigUrl = url.searchParams.get('base');
-    const sourceUrl = url.searchParams.get('src') || 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt';
+    const baseConfigUrl = decodeURIComponent(url.searchParams.get('base') || '');
+    const sourceUrl = decodeURIComponent(url.searchParams.get('src') || 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt');
     const groupName = url.searchParams.get('groupName') || 'PROXY';
 
-    if (!baseConfigUrl) {
+    if (!baseConfigUrl.length) {
       return getHelloPage();
     }
 
@@ -63,9 +63,9 @@ const getHelloPage = () => {
         <div>
           <pre>missing required arguments: base</pre>
           <pre>valid arguments:</pre>
-          <pre>base      *[url]    base config file you want to merge in. it must contain an item in "rules" called "ruleSlot".</pre>
-          <pre>src        [url]    gfwlist source. default: github</pre>
-          <pre>groupName  [string] proxy group name. default: PROXY</pre>
+          <pre>base      *[encodedUrl] base config file you want to merge in. it must contain an item in "rules" called "ruleSlot".</pre>
+          <pre>src        [encodedUrl] gfwlist source. default: github</pre>
+          <pre>groupName  [string]     proxy group name. default: PROXY</pre>
         </div>
     </div>
     <style>
