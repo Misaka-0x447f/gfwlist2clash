@@ -24,6 +24,8 @@ export default {
     const sourceUrl = decodeURIComponent(url.searchParams.get('src') || 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt');
     const groupName = url.searchParams.get('groupName') || 'PROXY';
 
+    const sourceFileName = sourceUrl.split('/').pop() || 'untitled.yaml';
+
     if (!baseConfigUrl.length) {
       return getHelloPage();
     }
@@ -47,11 +49,16 @@ export default {
       return getErrorPage(`finding slot base in config (${baseConfigUrl})`, `base config must contain an item in "rules" called "${ruleSlotName}".`);
     }
 
-    parsedBaseConfig.rules = parsedBaseConfig.rules.splice(slotIndex, 1, ...convertedSource);
+    parsedBaseConfig.rules.splice(slotIndex, 1, ...convertedSource);
 
     return new Response(
       stringify(parsedBaseConfig),
-      { headers: { 'Content-Type': 'text/vnd.yaml' } }
+      {
+        headers: {
+          'Content-Type': 'text/vnd.yaml',
+          'Content-Disposition': `inline; filename="${sourceFileName}"`
+        }
+      }
     );
   }
 };
